@@ -6,8 +6,9 @@ public class Temperature
 
     public static final int FREEZING_TEMP_F = 32;
 
-    private static double highestTrackedTempF = 0;
-    private static double lowestTrackedTempF = 0;
+    private static double highestTrackedTempF;
+    private static double lowestTrackedTempF;
+    private static boolean didSetFirstTemps = false;
 
     public double getHighTemp() {
         return highTemp;
@@ -42,8 +43,16 @@ public class Temperature
         {
             tempScale = "F";
         }
-
-
+        if(tempScale.equals("C")) {
+            high = convertCtoF(high);
+            low = convertCtoF(low);
+            if(high > highestTrackedTempF){
+                highestTrackedTempF = high;
+            }
+            if(low < lowestTrackedTempF) {
+                lowestTrackedTempF = low;
+            }
+        }
         if(tempScale.equals("F")) {
         if(high > highestTrackedTempF){
             highestTrackedTempF = high;
@@ -52,9 +61,12 @@ public class Temperature
             lowestTrackedTempF = low;
         }
 
-            if(tempScale.equals("C")){
-                changeToF();
             }
+
+        if(!didSetFirstTemps){
+            highestTrackedTempF = high;
+            lowestTrackedTempF = low;
+            didSetFirstTemps = true;
         }
 
     }
@@ -63,7 +75,7 @@ public class Temperature
         return (temp * 1.8) + 32;
     }
     public static double convertFtoC(double temp){
-        return (temp - 32) * (5 / 9);
+        return (temp - 32) * 5 / 9;
     }
 
     public void changeToC(){
